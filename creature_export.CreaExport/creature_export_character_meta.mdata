@@ -1,0 +1,150 @@
+{
+    "AnchorPoints": {
+        "anchors": [],
+        "name": "Anchor Points",
+        "type": "anchorPointHolder"
+    },
+    "AnimRegionColors": {
+        "default": {},
+        "flight": {}
+    },
+    "CompositeClips": {},
+    "VertAttachments": {
+        "attachments": [],
+        "name": "Vert Attachments",
+        "type": "vertAttachHolder"
+    },
+    "eventTriggers": {
+        "default": [],
+        "flight": []
+    },
+    "meshes": {
+        "Body": {
+            "endIndex": 5291,
+            "id": 2,
+            "startIndex": 2982
+        },
+        "Cap": {
+            "endIndex": 9962,
+            "id": 10,
+            "startIndex": 9687
+        },
+        "Head": {
+            "endIndex": 9203,
+            "id": 5,
+            "startIndex": 7680
+        },
+        "Leg1": {
+            "endIndex": 9686,
+            "id": 8,
+            "startIndex": 9204
+        },
+        "Leg2": {
+            "endIndex": 2981,
+            "id": 9,
+            "startIndex": 2499
+        },
+        "Tail1": {
+            "endIndex": 12350,
+            "id": 11,
+            "startIndex": 9963
+        },
+        "Tail2": {
+            "endIndex": 7679,
+            "id": 3,
+            "startIndex": 5292
+        },
+        "Wing2": {
+            "endIndex": 2498,
+            "id": 14,
+            "startIndex": 0
+        },
+        "WingFront": {
+            "endIndex": 14849,
+            "id": 13,
+            "startIndex": 12351
+        }
+    },
+    "physicsData": {
+        "default": {
+            "motor_1": [
+                "Bone_12",
+                "Bone_13",
+                "Bone_14",
+                "Bone_15",
+                "Bone_16",
+                "Bone_17",
+                "Bone_18",
+                "Bone_19"
+            ],
+            "motor_2": [
+                "Bone_20",
+                "Bone_21",
+                "Bone_22",
+                "Bone_23",
+                "Bone_24",
+                "Bone_25",
+                "Bone_26",
+                "Bone_27",
+                "Bone_28"
+            ],
+            "motor_3": [
+                "Bone_29",
+                "Bone_30"
+            ],
+            "motor_4": [
+                "Bone_31",
+                "Bone_32"
+            ]
+        },
+        "flight": {
+            "motor_1": [
+                "Bone_12",
+                "Bone_13",
+                "Bone_14",
+                "Bone_15",
+                "Bone_16",
+                "Bone_17",
+                "Bone_18",
+                "Bone_19"
+            ],
+            "motor_2": [
+                "Bone_20",
+                "Bone_21",
+                "Bone_22",
+                "Bone_23",
+                "Bone_24",
+                "Bone_25",
+                "Bone_26",
+                "Bone_27",
+                "Bone_28"
+            ],
+            "motor_3": [
+                "Bone_29",
+                "Bone_30"
+            ],
+            "motor_4": [
+                "Bone_31",
+                "Bone_32"
+            ],
+            "motor_5": [
+                "Bone_34",
+                "Bone_35",
+                "Bone_36",
+                "Bone_37"
+            ]
+        }
+    },
+    "regionOrders": {
+        "default": [],
+        "flight": []
+    },
+    "skinSwapList": {
+        "Default": {
+            "swap": {
+                "name": "Default",
+                "swap_items": []
+            }
+        }
+    }
+}

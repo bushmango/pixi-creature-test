@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>hello phaser!</title>
+        <script src="phaser-2.js"></script>
+        <script src="gl-matrix.js"></script>
+		<script src="flatbuffers.js"></script>
+		<script src="CreatureFlatData_generated.js"></script>
+		<script src="CreatureMeshBone.js"></script>
+		<script src="CreaturePixiJSRenderer.js"></script>
+		<script src="CreaturePhaserRenderer.js"></script>
+    </head>
+    <body>
+
+    <script type="text/javascript">
+
+    window.onload = function() {
+
+        var game = new Phaser.Game(800, 600, Phaser.WEBGL, '', { preload: preload, create: create, update: update});
+        var texture = null;
+        var new_creature = null;
+        var new_animation_1 = null;
+        var new_animation_2 = null;
+        var new_manager = null;
+        var creaturePhasorObject = null;
+        
+        // For testing
+        var new_manager2 = null;
+        var creaturePhasorObject2 = null;
+
+        function preload () {
+            game.load.text('iceJSON', 'iceDemonExport_character_data.json');
+			//game.load.binary('iceBin', 'iceDemonExport_character_data.bytes', binaryLoadCallback, this);
+             
+            // create a texture from an image path            
+			//game.load.image('succTexture', 'debug3Export_character_img.png');
+			game.load.image('iceDemonTexture', 'iceDemonExport_character_img.png');
+        }
+        
+        function binaryLoadCallback(key, data) {
+    		//  Convert our binary file into a Uint8Array
+    		//  We must return the data value or nothing will be added to the cache, even if you don't modify it.
+		    return new Uint8Array(data);
+		}
+        
+        function initDebugging()
+        {
+        	bmd = game.add.bitmapData(800,600);
+            sprite = game.add.sprite(0, 0, bmd); 
+        }
+
+        function create () {
+        	// Grab actual texture for rendering
+        	texture = new PIXI.Texture(game.cache.getBaseTexture('iceDemonTexture'));
+
+			initDebugging();
+            
+            // Core Creature Objects
+			var actual_data = JSON.parse(game.cache.getText('iceJSON').slice(0)); // Make a copy/clone of the input JSON string
+			//var actual_data = CreatureModuleUtils.LoadCreatureFlatData(game.cache.getBinary('iceBin').slice(0));
+			
+			new_creature = new Creature(actual_data, false);
+			//new_creature.anchor_points_active = false;
+			//new_creature = new Creature(actual_data, true);
+			
+			//new_animation_1 = new CreatureAnimation(actual_data, "idle", new_creature);
+			//new_animation_2 = new CreatureAnimation(actual_data, "back", new_creature);
+			
+			//new_animation_1 = new CreatureAnimation(actual_data, "idle", true);
+			//new_animation_1 = new CreatureAnimation(actual_data, "default", true);
+			new_animation_1 = new CreatureAnimation(actual_data, "default", false);
+			
+			new_manager = new CreatureManager(new_creature);
+			
+			new_manager.AddAnimation(new_animation_1);
+			new_manager.SetActiveAnimationName("default", false);
+
+			//new_manager.AddAnimation(new_animation_2);
+			//new_manager.SetActiveAnimationName("idle", false);
+			//new_manager.SetAutoBlending(true);
+			//new_manager.AutoBlendTo("back", 0.01);
+			
+			//new_manager.SetActiveAnimationName("back", false);
+			new_manager.SetShouldLoop(true);
+			new_manager.SetIsPlaying(true);
+			
+			// Test point caching
+			//new_manager.MakePointCache("default");
+			
+			// Test point fill caching
+			/*
+			for(var i = 350; i <= 500; i++)
+			{
+				new_manager.FillSinglePointCacheFrame("default", i);
+			}
+			*/
+						
+			console.log('Loaded and created Core Creature Objects.');
+			
+			// Phasor Creature Object			
+			creaturePhasorObject = new Phaser.CreatureDraw(game.world, 
+													game.world.centerX, 
+													game.world.centerY,
+													new_manager,
+													texture);
+													
+			new_manager.RunAtTime(0);
+			var pixelScale = creaturePhasorObject.GetPixelScaling(600, 650); 
+			creaturePhasorObject.scale.set(pixelScale[0], pixelScale[1]);
+			
+			//creaturePhasorObject.scale.set(35.0);
+			creaturePhasorObject.timeDelta = 0.035;
+			game.world.add(creaturePhasorObject);
+			
+			
+			// Second object for testing
+			/*
+			new_manager2 = new CreatureManager(new_creature);
+			new_manager2.AddAnimation(new_animation_1);
+			//new_manager2.AddAnimation(new_animation_2);
+			new_manager2.SetActiveAnimationName("default", false);
+			new_manager2.SetShouldLoop(true);
+			new_manager2.SetIsPlaying(true);
+			new_manager2.RunAtTime(0);
+			
+			creaturePhasorObject2 = new Phaser.CreatureDraw(game.world, 
+													game.world.centerX, 
+													game.world.centerY,
+													new_manager2,
+													texture);
+			creaturePhasorObject2.scale.set(15.0);
+			creaturePhasorObject2.timeDelta = 0.1;
+			game.world.add(creaturePhasorObject2);
+			*/
+        }
+        
+        function update() {
+        	// for debugging
+        	
+        	// draw boundary rectangles
+        	/*
+        	var target_creature = creaturePhasorObject.creature_manager.target_creature;
+        	
+        	bmd.clear();
+        	
+        	var dbgPt = new PIXI.Point(0,0);
+        	for(var i = 0; i < target_creature.boundary_indices.length; i++)
+        	{
+        		var ref_idx = target_creature.boundary_indices[i] * 3;
+				var ref_x = target_creature.render_pts[ref_idx];
+				var ref_y = target_creature.render_pts[ref_idx + 1];
+				
+				dbgPt.set(ref_x, -ref_y);
+				creaturePhasorObject.worldTransform.apply(dbgPt, dbgPt);	
+					
+				bmd.ctx.fillStyle = "rgb(200,0,0)";
+				bmd.ctx.fillRect(dbgPt.x, dbgPt.y, 5, 5);
+        	}
+        	
+        	
+        	bmd.ctx.beginPath();
+        	bmd.ctx.strokeStyle = "white";
+            bmd.ctx.lineWidth = 10;
+        	bmd.ctx.rect(creaturePhasorObject.creatureBoundsMin.x,
+        										creaturePhasorObject.creatureBoundsMin.y,
+        										creaturePhasorObject.creatureBoundsMax.x - creaturePhasorObject.creatureBoundsMin.x,
+        										creaturePhasorObject.creatureBoundsMax.y - creaturePhasorObject.creatureBoundsMin.y);
+        	bmd.ctx.stroke();
+        	
+        	
+        	bmd.dirty = true;
+        	*/
+        }
+
+    };
+
+    </script>
+
+    </body>
+</html>
